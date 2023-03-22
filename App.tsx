@@ -1,6 +1,8 @@
 import * as React from 'react';
 
 import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
 
 import './style.css';
 
@@ -29,29 +31,26 @@ export default function App() {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Inventário de ervas para chá</h1>
-      <input
-        className="tea-search"
-        type="text"
-        placeholder="Erva"
-        onChange={(e) => searchHerb(e)}
-        value={name}
-      />
-      <span>
-        {' '}
-        <a href="#" onClick={(e) => cleanSearch(e)}>
-          Limpar busca
-        </a>
-      </span>
+      <InputGroup className="mb-3">
+        <Form.Control
+          onChange={(e) => searchHerb(e)}
+          placeholder="Erva"
+          aria-label="Erva"
+          aria-describedby="basic-addon1"
+          value={name}
+        />
+      </InputGroup>
+
+      <Button onClick={(e) => cleanSearch(e)}>Limpar busca</Button>
+
       <p>{name ? 'Você esta procurando por: ' + name : ''}</p>
       <ul>
         {herbs.map((herb) => (
           <li>{herb}</li>
         ))}
       </ul>
-
-      <Button>Click me</Button>
     </div>
   );
 }
