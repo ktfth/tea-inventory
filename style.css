@@ -1,0 +1,10 @@
+h1,
+p {
+  font-family: Lato;
+}
+
+.tea-search {
+  width: 23rem;
+  padding: 1rem 1rem;
+  font-size: 2rem;
+}
