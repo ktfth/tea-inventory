@@ -1,4 +1,7 @@
 import * as React from 'react';
+
+import Button from 'react-bootstrap/Button';
+
 import './style.css';
 
 export default function App() {
@@ -47,6 +50,8 @@ export default function App() {
           <li>{herb}</li>
         ))}
       </ul>
+
+      <Button>Click me</Button>
     </div>
   );
 }
