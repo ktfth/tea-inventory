@@ -3,6 +3,8 @@ import * as React from 'react';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
+import ListGroup from 'react-bootstrap/ListGroup';
+import MiniSearch from 'minisearch';
 
 import './style.css';
 
@@ -11,27 +13,57 @@ function Bold(name) {
 }
 
 export default function App() {
-  const initialHerbs = ['Mate', 'Preto', 'Camomila', 'Maracujá'];
-  let [herbs, setHerbs] = React.useState(initialHerbs);
+  const initialHerbs = [
+    'Lavanda',
+    'Lúcia-lima',
+    'Hortelã',
+    'Erva-cidreira',
+    'Gengibre',
+    'Tomilho',
+    'Camomila',
+    'Jasmim',
+    'Stévia',
+    'Manjerona',
+    'Coentro',
+    'Alecrim',
+    'Erva-doce',
+    'Erva-de-São-João',
+    'Sálvia',
+    'Amor-perfeito',
+    '(Viola',
+    'tricolor)',
+    'Manjericão',
+    'Erva-gateira',
+    'Capim-limão',
+  ].map((tea, id) => ({ id: id + 1, name: tea }));
+
+  const teas = new MiniSearch({
+    fields: ['name'],
+    storeFields: ['name'],
+    searchOptions: {
+      boost: { title: 2 },
+      fuzzy: 0.2,
+    },
+  });
+
+  teas.addAll(initialHerbs);
+
   let [name, setName] = React.useState('');
+  let [herbs, setHerbs] = React.useState(teas.search(name));
 
   function searchHerb(e) {
     setName(e.target.value);
-    setHerbs(herbs.filter((herb) => herb.includes(name)));
-
-    if (!herbs.some((herb) => herb.includes(e.target.value))) {
-      setHerbs(initialHerbs);
-    }
+    setHerbs(teas.search(name));
 
     if (e.target.value === '') {
-      setHerbs(initialHerbs);
+      setHerbs(teas.search(name));
     }
   }
 
   function cleanSearch(e) {
     e.preventDefault();
     setName('');
-    setHerbs(initialHerbs);
+    setHerbs(teas.search(name));
   }
 
   return (
@@ -68,11 +100,15 @@ export default function App() {
 
       <hr />
 
-      <ul>
-        {herbs.map((herb) => (
-          <li>{herb}</li>
-        ))}
-      </ul>
+      <ListGroup>
+        {teas.search(name).length === 0
+          ? initialHerbs.map((herb) => (
+              <ListGroup.Item>{herb.name}</ListGroup.Item>
+            ))
+          : teas
+              .search(name)
+              .map((herb) => <ListGroup.Item>{herb.name}</ListGroup.Item>)}
+      </ListGroup>
     </div>
   );
 }
